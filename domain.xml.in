@@ -1,0 +1,56 @@
+<domain type='kvm'>
+  <name>@VM_NAME@</name>
+  <memory unit='MiB'>@VM_MEMORY_MIB@</memory>
+  <vcpu placement='static'>@VM_VCPUS@</vcpu>
+  <os>
+    <type arch='x86_64' machine='q35'>hvm</type>
+    <kernel>@KERNEL_PATH@</kernel>
+    <initrd>@INITRD_PATH@</initrd>
+    <cmdline>root=/dev/vda rw console=ttyS0,115200 syscall.x32=y ia32_emulation=0 mitigations=off</cmdline>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <cpu mode='host-passthrough' check='none' migratable='on'/>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' discard='unmap'/>
+      <source file='@DISK_PATH@'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <controller type='pci' index='0' model='pcie-root'/>
+    <interface type='network'>
+      <source network='@NET_NAME@'/>
+      <model type='virtio'/>
+    </interface>
+    <serial type='tcp'>
+      <source mode='bind' host='@CONSOLE_HOST@' service='@CONSOLE_PORT@'/>
+      <protocol type='raw'/>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='tcp'>
+      <source mode='bind' host='@CONSOLE_HOST@' service='@CONSOLE_PORT@'/>
+      <protocol type='raw'/>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='unix'>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+    </channel>
+    <rng model='virtio'>
+      <backend model='random'>/dev/urandom</backend>
+    </rng>
+  </devices>
+</domain>
