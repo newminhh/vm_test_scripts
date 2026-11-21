@@ -36,7 +36,7 @@ i386_pkgs="$(printf "%s\n" "$all_pkgs" | grep ":i386$" || true)"
 echo "total packages: ${total_pkgs}, i386 packages count: $(printf "%s" "$i386_pkgs" | grep -c . || true)"
 [[ -z "$i386_pkgs" ]] || fail "found unexpected :i386 packages: ${i386_pkgs}"
 
-if dpkg-query -W libc6-i386 >/dev/null 2>&1; then
+if dpkg -s libc6-i386 2>/dev/null | grep -q "Status: install ok installed"; then
   fail "libc6-i386 package must not be installed"
 fi
 

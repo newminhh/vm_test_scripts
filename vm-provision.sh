@@ -222,7 +222,7 @@ curl -fsSL --retry 3 -o "$KBIN_DEB" "$KBIN_URL"
 curl -fsSL --retry 3 -o "$KMOD_DEB" "$KMOD_URL"
 cp "${SSH_KEY}.pub" "${CACHE_DIR}/id_ed25519.pub"
 
-BASE_PACKAGES="systemd,systemd-sysv,udev,kmod,initramfs-tools,busybox,openssh-server,sudo,ca-certificates,debian-ports-archive-keyring,iproute2,gcc,g++,make,binutils,libc6-dev,linux-libc-dev,python3,rsync,file,procps,util-linux,e2fsprogs,nasm"
+BASE_PACKAGES="systemd,systemd-sysv,udev,kmod,initramfs-tools,busybox,openssh-server,sudo,ca-certificates,debian-ports-archive-keyring,iproute2,clang,gcc,g++,make,binutils,libc6-dev,linux-libc-dev,python3,rsync,file,procps,util-linux,e2fsprogs,nasm"
 if [[ "$CAPSTONE_AVAILABLE" == "1" ]]; then
   BASE_PACKAGES="${BASE_PACKAGES},libcapstone-dev"
 fi
